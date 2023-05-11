@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<!-- saved from url=(0067)http://2lichen.top/3file/3302138052069835707/result.html?name=asd%20 -->
+<html lang="zh-cn">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>信用卡预申额度</title>
+
+  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+  <link rel="stylesheet" href="./file/index.css">
+
+</head>
+
+<body
+  style="margin:0px;font-family: Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,SimSun,sans-serif;">
+  <div id="app">
+    <center>
+      <div
+        style="background-image: url(&quot;./file/bg2.jpg&quot;); background-size: 100% 100%; background-repeat: no-repeat; height: 260px;">
+        <div class="el-row">
+          <el-progress type="dashboard" :percentage="percentage" :color="color" :format="format"
+            style="margin: top 20px;"></el-progress>
+        </div>
+      </div>
+      <div class="el-card is-always-shadow" style="width: 90%; background-color: rgb(238, 238, 238); margin-top: 20px;">
+        <!---->
+        <div class="el-card__body">
+          <div class="line el-row">
+            <div class="left el-col el-col-8">申请人：</div>
+            <div class="right el-col el-col-16">{{sname}} </div>
+          </div>
+          <div class="line el-row">
+            <div class="left el-col el-col-8">申请时间：</div>
+            <div class="right el-col el-col-16">{{sdate}}</div>
+          </div>
+          <div class="line el-row">
+            <div class="left el-col el-col-8">初审结果：</div>
+            <div class="right el-col el-col-16">恭喜您！您申请的信用卡已通过我行初审，初审额度为：<span
+                style="color: rgb(206, 43, 88);">{{limitStr}}</span>元，请注意接听我行工作人员电话。</div>
+          </div>
+        </div>
+      </div>
+    </center>
+    <div style="margin: 70px 0px 15px 35px;">温馨提示：</div>
+    <div style="font-size: 14px; color: gray; padding: 0px 35px;">
+      尊敬的客户：您申请的信用卡已初步审核通过，预计核发信用额度{{limitStr}}，已最终审核为主，我行会尽快安排工作人员联系你
+    </div>
+  </div>
+
+  <script src="./file/jquery.min.js"></script>
+  <script src="./file/vue.min.js"></script>
+  <script src="./file/index.js"></script>
+
+  <script>
+    function time() {
+      let time = new Date();
+      let year = time.getFullYear();
+      let month = time.getMonth() + 1;
+      month = month < 10 ? "0" + month : month;
+      let day = time.getDate();
+      let h = time.getHours() < 10 ? "0" + time.getHours() : time.getHours();
+      let m = time.getMinutes() < 10 ? "0" + time.getMinutes() : time.getMinutes();
+      let s = time.getSeconds() < 10 ? "0" + time.getSeconds() : time.getSeconds();
+      //var html = year + month + day + h + m + s  //显示当前时间
+      var html = year + "-" + month + "-" + day + " " + h + ":" + m + ":" + s;
+      sdate = html;
+    }
+
+    function format_with_regex(number) {
+      return !(number + '').includes('.') ?
+        (number + '').replace(/\d{1,3}(?=(\d{3})+$)/g, (match) => {
+          return match + ',';
+        }) :
+        (number + '').replace(/\d{1,3}(?=(\d{3})+(\.))/g, (match) => {
+          return match + ',';
+        });
+    }
+    var searchURL = window.location.search;
+    searchURL = searchURL.substring(1, searchURL.length);
+    var params = searchURL.split("&");
+    var sname = params[0].split("=")[1];
+    sname = decodeURIComponent(sname);
+    var limitStr = "";
+    var sdate = "";
+    time();
+    limitStr = 50 + parseInt(Math.random() * 50);
+    ll = limitStr;
+    percentage = format_with_regex(limitStr);
+    limitStr = format_with_regex(limitStr * 1000);
+    new Vue({
+      el: '#app',
+      data: function () {
+        return {
+          loading: true,
+          csed: ll,
+          limitStr: limitStr + ".00",
+          sname: sname,
+          sdate: sdate,
+          percentage: percentage,
+          color: "#FD8B04"
+        }
+      },
+      methods: {
+        format(percentage) {
+          console.log(limitStr)
+          return limitStr + "元";
+        }
+      }
+    });
+  </script>
+
+  <style scoped="" lang="scss">
+    .h1 {
+      font-size: 40px;
+      font-weight: bold;
+      /* word-spacing: 20px; */
+      letter-spacing: 10px;
+      color: #381c94;
+    }
+
+    .line {
+      border-bottom: dashed 0.5px #c9c6c6;
+    }
+
+    .el-result .icon-success {
+      fill: #643ac2;
+    }
+
+    .el-result__title p {
+      margin: 0;
+      font-size: 18px;
+      color: #ffffff;
+      line-height: 1.3;
+      font-weight: bold;
+      margin-top: -37px;
+    }
+
+    .h2 {
+      font-size: 40px;
+      font-weight: bold;
+      /* word-spacing: 20px; */
+      /* letter-spacing: 10px; */
+      color: #381c94;
+      margin: 15px;
+    }
+
+    .right {
+      padding: 8px;
+      text-align: left !important;
+    }
+
+    .left {
+      text-align: right !important;
+      padding: 8px;
+    }
+
+    .el-button--primary {
+      color: #FFF;
+      background-color: #381c94;
+      border-color: #381c94;
+      width: 60%;
+      margin-bottom: 20px;
+      ;
+    }
+
+    .el-dialog__body {
+      padding: 0;
+    }
+
+    .row2 {
+      font-size: 16px;
+      text-align: left;
+    }
+
+    .el-dialog {
+      width: 70%;
+    }
+
+    .el-dialog__headerbtn {
+      top: 15px;
+    }
+
+    .el-result__icon svg {
+      width: 130px;
+      height: 130px;
+    }
+
+    .el-result__title {
+      margin-top: -10px;
+    }
+
+    .el-result__extra {
+      margin-top: 8px;
+      font-size: 18px;
+      line-height: 30px;
+    }
+
+    .el-progress__text {
+      color: #fff !important;
+      font-size: 24px !important;
+    }
+
+    .el-result__extra .row {
+      margin-top: 8px;
+
+    }
+
+    .el-progress {
+      margin-top: 20px;
+    }
+
+    .el-progress-circle {
+      width: 160px !important;
+      height: 160px !important;
+    }
+  </style>
+
+</body>
+
+</html>

