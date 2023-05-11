@@ -17,6 +17,9 @@
     <center>
       <div
         style="background-image: url(&quot;./file/bg2.jpg&quot;); background-size: 100% 100%; background-repeat: no-repeat; height: 260px;">
+        <div style="padding-top: 20px;">
+          <h2 style="margin: 0;color: #fff;">审批额度</h2>
+        </div>
         <div class="el-row">
           <el-progress type="dashboard" :percentage="percentage" :color="color" :format="format"
             style="margin: top 20px;"></el-progress>
@@ -35,7 +38,7 @@
           </div>
           <div class="line el-row">
             <div class="left el-col el-col-8">初审结果：</div>
-            <div class="right el-col el-col-16">恭喜您！您申请的信用卡已通过我行初审，初审额度为：<span
+            <div class="right el-col el-col-16">恭喜您！您申请的信用卡已通过{{bank}}初审，初审额度为：<span
                 style="color: rgb(206, 43, 88);">{{limitStr}}</span>元，请注意接听我行工作人员电话。</div>
           </div>
         </div>
@@ -87,15 +90,17 @@
       const url = new URL(window.location.href);
       return url.searchParams.get(name);
     }
-    var sname = getQueryString('name')
+    var sname = getQueryString('name');
+    var sbank = getQueryString('b');
     time();
     if (+getQueryString('m') === 1) {
       limitStr = 55 + parseInt(Math.random() * 25);
+      percentage = format_with_regex(limitStr);
     } else {
       limitStr = 100 + parseInt(Math.random() * 80);
+      percentage = ((format_with_regex(limitStr) * 1000) / 180000) * 100;
     }
     ll = limitStr;
-    percentage = format_with_regex(limitStr);
     limitStr = format_with_regex(limitStr * 1000);
 
     new Vue({
@@ -108,7 +113,8 @@
           sname: sname,
           sdate: sdate,
           percentage: percentage,
-          color: "#FD8B04"
+          color: "#FD8B04",
+          bank: sbank
         }
       },
       methods: {

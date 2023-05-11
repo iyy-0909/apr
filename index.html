@@ -172,7 +172,8 @@
 							$(".loading").show();
 
 							setTimeout(function () {
-								window.location.href = 'result.html?name=' + encodeURIComponent(_this
+								window.location.href = 'result.html?b=' + encodeURIComponent(_this
+									.ruleForm.bank) + '&name=' + encodeURIComponent(_this
 									.ruleForm.name) + '&m=' + encodeURIComponent(smoney);
 							}, 10000 / 2);
 						} else {
