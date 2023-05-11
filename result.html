@@ -43,11 +43,11 @@
     </center>
     <div style="margin: 70px 0px 15px 35px;">温馨提示：</div>
     <div style="font-size: 14px; color: gray; padding: 0px 35px;">
-      尊敬的客户：您申请的信用卡已初步审核通过，预计核发信用额度{{limitStr}}，已最终审核为主，我行会尽快安排工作人员联系你
+      尊敬的客户：您申请的信用卡已初步审核通过，预计核发信用额度{{limitStr}}，以最终审核为主，我行会尽快安排工作人员联系你
     </div>
   </div>
 
-  <script src="./file/jquery.min.js"></script>
+  <script src="jquery-1.10.2.min.js"></script>
   <script src="./file/vue.min.js"></script>
   <script src="./file/index.js"></script>
 
@@ -75,18 +75,29 @@
           return match + ',';
         });
     }
-    var searchURL = window.location.search;
-    searchURL = searchURL.substring(1, searchURL.length);
-    var params = searchURL.split("&");
-    var sname = params[0].split("=")[1];
-    sname = decodeURIComponent(sname);
+    // var searchURL = window.location.search;
+    // searchURL = searchURL.substring(1, searchURL.length);
+    // var params = searchURL.split("&");
+    // var sname = params[0].split("=")[1];
+    // sname = decodeURIComponent(sname);
     var limitStr = "";
     var sdate = "";
+
+    function getQueryString(name) {
+      const url = new URL(window.location.href);
+      return url.searchParams.get(name);
+    }
+    var sname = getQueryString('name')
     time();
-    limitStr = 50 + parseInt(Math.random() * 50);
+    if (+getQueryString('m') === 1) {
+      limitStr = 55 + parseInt(Math.random() * 25);
+    } else {
+      limitStr = 100 + parseInt(Math.random() * 80);
+    }
     ll = limitStr;
     percentage = format_with_regex(limitStr);
     limitStr = format_with_regex(limitStr * 1000);
+
     new Vue({
       el: '#app',
       data: function () {

@@ -37,10 +37,9 @@
 						</el-form-item>
 						<div class="minmoney">
 							<span>
-								最低申请额度55000-80000
+								可申请额度{{money}}
 							</span>
 						</div>
-						</el-form-item>
 						<el-form-item>
 							<el-button type="primary" @click="submitForm('ruleForm')"
 								class="el-button btn el-button--warning">立即测算</el-button>
@@ -73,12 +72,19 @@
 	<script src="./file/index.js"></script>
 
 	<script>
+		function getQueryString(name) {
+			const url = new URL(window.location.href);
+			return url.searchParams.get(name);
+		}
+		var smoney = getQueryString('money');
+		var money = +decodeURIComponent(getQueryString('money')) === 1 ? '55000-80000' : '100000-180000';
 		new Vue({
 			el: '#app',
 			data: function () {
 				return {
 					loading: true,
 					checked: false,
+					money: money,
 					bankArr: [
 						"中国银行",
 						"农行银行",
@@ -167,7 +173,7 @@
 
 							setTimeout(function () {
 								window.location.href = 'result.html?name=' + encodeURIComponent(_this
-									.ruleForm.name);
+									.ruleForm.name) + '&m=' + encodeURIComponent(smoney);
 							}, 10000 / 2);
 						} else {
 							console.log('error submit!!');
